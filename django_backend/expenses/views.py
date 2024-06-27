@@ -3,8 +3,16 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from expenses.serializers import ExpenseSerializer
 from expenses.models import Expense
-
+from dateutil import parser
 # Create your views here.
+
+def get_all_data():
+    data = ExpenseSerializer(Expense.objects.all(), many=True).data
+    for date in data:
+        tmp = parser.parse(date['date'])
+        date['date'] = tmp.strftime('%Y-%m-%d %H:%M')
+
+    return data
 
 @csrf_exempt
 def expense_list(request):
@@ -13,16 +21,16 @@ def expense_list(request):
     For POST --> add a new item
     """
     if request.method == 'GET':
-        expenses = Expense.objects.all()
-        serializer = ExpenseSerializer(expenses, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        data = get_all_data()
+        return JsonResponse(data, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = ExpenseSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
+            data = get_all_data()
+            return JsonResponse(data, status=201, safe=False)
         return JsonResponse(serializer.errors, status=400)
 
 

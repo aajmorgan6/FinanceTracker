@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
-import Modal from 'react-bootstrap/Modal'
+import AddModal from './AddModal';
 
 
 function HomePage() {
@@ -22,9 +22,8 @@ function HomePage() {
     const setAddFalse = () => setShowAdd(false);
 
     return (
-        <div className="container">
+        <div class="justify-content-center">
             <h1 className="text-center">Welcome to your Personal Finance Tracker!</h1>
-            {showAdd === false ? (
                 <div className='container'>
             <table className="table table-striped table-bordered">
                 <thead className="thead-dark">
@@ -44,24 +43,13 @@ function HomePage() {
                     ))}
                 </tbody>
             </table> 
-            <div className="justify-content-center">
+            <div className="justify-content-right">
                 <Button className="text-right btn btn-primary " variant="contained" onClick={setAddTrue}>Add Expense</Button>
             </div> 
             </div>
-            ) : (
-                <div className='container center'>
-            <Modal show={showAdd} onHide={setAddFalse}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Expense</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Here's where we'll add expenses</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="contained" className='btn btn-primary' onClick={setAddFalse}>Save</Button>
-                    <Button variant="" className='btn btn-secondary' onClick={setAddFalse}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
+            <div className='container center'>
+                <AddModal showAdd={showAdd} setAddFalse={setAddFalse} setData={setData}/>
             </div>
-)}
         </div>
     )
 }

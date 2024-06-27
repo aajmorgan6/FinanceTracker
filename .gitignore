@@ -2,3 +2,4 @@
 .venv
 django_backend/backend/__pycache__/
 react_frontend/node_modules/
+./django_backend/db.sqlite3
