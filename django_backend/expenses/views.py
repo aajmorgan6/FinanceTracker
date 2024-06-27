@@ -1,8 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from expenses.serializers import ExpenseSerializer
-from expenses.models import Expense
+from expenses.serializers import ExpenseSerializer, PaymentTypeSerializer
+from expenses.models import Expense, PaymentType
 from dateutil import parser
 # Create your views here.
 
@@ -20,6 +20,7 @@ def expense_list(request):
     For GET --> return all expenses
     For POST --> add a new item
     """
+    # TODO: all payment types become cash for some reason
     if request.method == 'GET':
         data = get_all_data()
         return JsonResponse(data, safe=False)
@@ -38,7 +39,8 @@ def expense_list(request):
 def expense_detail(request, pk):
     """
     For GET --> returns specific item's data
-    For PUT --> 
+    For PUT --> edits specific item's data
+    For DELETE --> delete an expense
     """
     try:
         expense = Expense.objects.get(pk=pk)
@@ -60,3 +62,20 @@ def expense_detail(request, pk):
     elif request.method == 'DELETE':
         expense.delete()
         return HttpResponse(status=204)
+
+
+@csrf_exempt
+def get_payment_types(request):
+    if request.method == "GET":
+        objects = PaymentType.objects.all() # will filter for users
+        data = PaymentTypeSerializer(objects, many=True).data
+        return JsonResponse({'data': data}, status=200, safe=False)
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        print(data)
+        serializer = PaymentTypeSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            data = PaymentTypeSerializer(PaymentType.objects.all(), many=True).data
+            return JsonResponse({'data': data}, status=200, safe=True)
+    return HttpResponse(status=401)

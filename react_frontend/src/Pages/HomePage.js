@@ -22,7 +22,7 @@ function HomePage() {
     const setAddFalse = () => setShowAdd(false);
 
     return (
-        <div class="justify-content-center">
+        <div className="justify-content-center">
             <h1 className="text-center">Welcome to your Personal Finance Tracker!</h1>
                 <div className='container'>
             <table className="table table-striped table-bordered">
@@ -30,7 +30,7 @@ function HomePage() {
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Amount</th>
-                        <th scope='col'>Reason</th>
+                        <th scope='col'>Payment Type</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@ function HomePage() {
                         <tr key={key}>
                             <td>{data[key].date}</td>
                             <td>{data[key].amount}</td>
-                            <td>{data[key].reason}</td>
+                            <td>{data[key].payment_type}</td>
                         </tr>
                     ))}
                 </tbody>

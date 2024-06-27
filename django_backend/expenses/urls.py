@@ -3,5 +3,6 @@ from expenses import views
 
 urlpatterns = [
     path('expenses/', views.expense_list),
-    path('expenses/<int:pk>/', views.expense_detail)
+    path('expenses/<int:pk>/', views.expense_detail),
+    path('pmtTypes/', views.get_payment_types)
 ]
