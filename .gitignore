@@ -1,2 +1,4 @@
 .env
 .venv
+django_backend/backend/__pycache__/
+react_frontend/node_modules/
