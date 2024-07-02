@@ -17,13 +17,16 @@ function AddModal({ showAdd, setAddFalse, setData }) {
             method: "post",
             body: JSON.stringify({
                 amount: parseFloat(amount),
-                reason: reason
+                reason: reason,
+                payment_type: pmtType
             })
         });
         const body = await res.json();
-        console.log(body);
         setAddFalse();
         setData(body);   
+        setAmount(0.0);
+        setReason("");
+        setPmtType("");
     }
 
     const handlePmtType = async (e) => {
@@ -47,7 +50,6 @@ function AddModal({ showAdd, setAddFalse, setData }) {
     const callAPI = async () => {
         const res = await fetch('http://localhost:8000/pmtTypes/');
         const body = await res.json();
-        console.log(body);
         setPaymentTypes(body.data);
     }
 
