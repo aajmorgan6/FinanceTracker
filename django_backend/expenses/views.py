@@ -20,7 +20,6 @@ def expense_list(request):
     For GET --> return all expenses
     For POST --> add a new item
     """
-    # TODO: all payment types become cash for some reason
     if request.method == 'GET':
         data = get_all_data()
         return JsonResponse(data, safe=False)

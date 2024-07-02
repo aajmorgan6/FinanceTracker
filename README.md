@@ -14,5 +14,10 @@ Make users so that multiple people can use this.
 
 More fields:
 - Input own date, but have default be now
-- What you paid with (credit card, cash, etc.)
 - Set up subscriptions, reoccuring payments
+
+Show this week's total off the bat
+
+Different pages, i.e. all expenses, planning
+
+Styling in general
