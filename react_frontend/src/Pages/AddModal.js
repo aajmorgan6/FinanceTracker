@@ -7,7 +7,7 @@ import { VscAdd, VscArrowLeft } from "react-icons/vsc"
 function AddModal({ showAdd, setAddFalse, setData }) {
     const [amount, setAmount] = useState();
     const [reason, setReason] = useState("");
-    const [pmtType, setPmtType] = useState("");
+    const [pmtType, setPmtType] = useState("Cash");
     const [paymentTypes, setPaymentTypes] = useState([]);
     const [showNewPmt, setShowNewPmt] = useState(false);
     const [newPmt, setNewPmt] = useState("");
@@ -27,7 +27,7 @@ function AddModal({ showAdd, setAddFalse, setData }) {
         setData(body);   
         setAmount(0.0);
         setReason("");
-        setPmtType("");
+        setPmtType("Cash");
     }
 
     const handlePmtType = async (e) => {
@@ -69,10 +69,11 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                         <Form.Group className="mb-3">
                             <Form.Label>Amount</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="number"
                                 value={amount} 
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="Amount of Expense"
+                                required
                             >
 
                             </Form.Control>
@@ -88,7 +89,9 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                         </Form.Group>
                         <Form.Group>
                         <Form.Label>Payment Type</Form.Label>
-                            <Form.Select value={pmtType} onChange={(e) => setPmtType(e.target.value)}>
+                            <Form.Select 
+                                value={pmtType} 
+                                onChange={(e) => setPmtType(e.target.value)}>
                             {Object.keys(paymentTypes).map(key => (
                                 <option value={paymentTypes[key].payment_type}>{paymentTypes[key].payment_type}</option>
                             ))}

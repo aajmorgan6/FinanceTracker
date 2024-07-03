@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
+import Table from 'react-bootstrap/Table'
 
 
 function HomePage() {
@@ -32,9 +33,9 @@ function HomePage() {
 
     return (
         <div className="justify-content-center bg-info vh-100">
-            <h1 className="text-center">Welcome to your Personal Finance Tracker!</h1>
+            <h1 className="text-center mb-3 fw-bold">Welcome to your Personal Finance Tracker!</h1>
                 <div className='container'>
-            <table className="table table-striped table-bordered">
+            <Table striped bordered hover>
                 <thead className="thead-dark">
                     <tr>
                         <th scope="col">Date</th>
@@ -51,13 +52,13 @@ function HomePage() {
                         </tr>
                     ))}
                 </tbody>
-            </table> 
+            </Table> 
             <div className="justify-content-right">
                 <Button className="text-right btn btn-primary " variant="contained" onClick={setAddTrue}>Add Expense</Button>
             </div> 
             </div>
             <div>
-                <DetailModal data={detail} showDetail={showDetail} setShowDetail={setShowDetail} />
+                <DetailModal data={detail} showDetail={showDetail} setShowDetail={setShowDetail} setData={setData} />
             </div>
             <div className='container center'>
                 <AddModal showAdd={showAdd} setAddFalse={setAddFalse} setData={setData}/>

@@ -10,7 +10,7 @@ def get_all_data():
     data = ExpenseSerializer(Expense.objects.all(), many=True).data
     for date in data:
         tmp = parser.parse(date['date'])
-        date['date'] = tmp.strftime('%Y-%m-%d %H:%M')
+        date['date'] = tmp.strftime('%m/%d/%Y at %H:%M')
 
     return data
 
@@ -27,6 +27,7 @@ def expense_list(request):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = ExpenseSerializer(data=data)
+        print(data)
         if serializer.is_valid():
             serializer.save()
             data = get_all_data()
@@ -60,7 +61,7 @@ def expense_detail(request, pk):
 
     elif request.method == 'DELETE':
         expense.delete()
-        return HttpResponse(status=204)
+        return JsonResponse(data=get_all_data(), safe=False)
 
 
 @csrf_exempt
