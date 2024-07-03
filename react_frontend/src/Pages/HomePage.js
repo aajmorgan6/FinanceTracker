@@ -82,7 +82,7 @@ function HomePage() {
                 <DetailModal data={detail} showDetail={showDetail} setShowDetail={setShowDetail} setData={setData} />
             </div>
             <div className='container center'>
-                <AddModal showAdd={showAdd} setAddFalse={setAddFalse} setData={setData}/>
+                <AddModal showAdd={showAdd} setAddFalse={setAddFalse} setData={setData} prevDays={prevDays}/>
             </div>
         </div>
     )

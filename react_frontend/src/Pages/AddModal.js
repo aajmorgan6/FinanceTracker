@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form"
 import { VscAdd, VscArrowLeft } from "react-icons/vsc"
 
-function AddModal({ showAdd, setAddFalse, setData }) {
+function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
     const [amount, setAmount] = useState();
     const [reason, setReason] = useState("");
     const [pmtType, setPmtType] = useState("Cash");
@@ -16,7 +16,7 @@ function AddModal({ showAdd, setAddFalse, setData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch('http://localhost:8000/expenses/', {
+        await fetch('http://localhost:8000/expenses/', {
             method: "post",
             body: JSON.stringify({
                 amount: parseFloat(amount),
@@ -26,6 +26,7 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                 time: time+":00"
             })
         });
+        const res = await fetch(`http://localhost:8000/lastX/${prevDays}/`)
         const body = await res.json();
         setAddFalse();
         setData(body);   
