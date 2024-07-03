@@ -1,10 +1,11 @@
 import { Button, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form"
 import { VscAdd, VscArrowLeft } from "react-icons/vsc"
 
 function AddModal({ showAdd, setAddFalse, setData }) {
-    const [amount, setAmount] = useState(0.0);
+    const [amount, setAmount] = useState();
     const [reason, setReason] = useState("");
     const [pmtType, setPmtType] = useState("");
     const [paymentTypes, setPaymentTypes] = useState([]);
@@ -64,22 +65,34 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                     <Modal.Title>Add Expense</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form>
-                        <label>
-                            Amount:
-                            <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-                        </label>
-                        <label>
-                            Reason:
-                            <input type="text" value={reason} onChange={(e) => setReason(e.target.value)} />
-                        </label>
-                        <label>
-                            Pmt Type:
-                            <select value={pmtType} onChange={(e) => setPmtType(e.target.value)}>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Amount</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={amount} 
+                                onChange={(e) => setAmount(e.target.value)}
+                                placeholder="Amount of Expense"
+                            >
+
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Reason</Form.Label>
+                            <Form.Control 
+                                type="text"
+                                value={reason} 
+                                onChange={(e) => setReason(e.target.value)}
+                                placeholder="Reason for Expense"
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                        <Form.Label>Payment Type</Form.Label>
+                            <Form.Select value={pmtType} onChange={(e) => setPmtType(e.target.value)}>
                             {Object.keys(paymentTypes).map(key => (
                                 <option value={paymentTypes[key].payment_type}>{paymentTypes[key].payment_type}</option>
                             ))}
-                            </select>
+                            </Form.Select>
                             {!showNewPmt &&
                                 <IconButton aria-label="add">
                                     <VscAdd title="Add new payment type" onClick={() => setShowNewPmt(true)}/>
@@ -87,7 +100,13 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                             }
                             {showNewPmt && (
                                 <>
-                            <input type="text" value={newPmt} onChange={(e) => setNewPmt(e.target.value)} />
+                                <br />
+                            <Form.Control 
+                                type="text" 
+                                value={newPmt} 
+                                onChange={(e) => setNewPmt(e.target.value)} 
+                                placeholder="New form of Paymnet"
+                            />
                             <IconButton aria-label="add-now">
                                 <VscAdd title="Add payment type" onClick={handlePmtType} />
                             </IconButton>
@@ -96,9 +115,9 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                             </IconButton>
                             </>
                             )}
-                            
-                        </label>
-                    </form>
+                        </Form.Group>
+                        
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="contained" className='btn btn-primary' onClick={handleSubmit}>Save</Button>
