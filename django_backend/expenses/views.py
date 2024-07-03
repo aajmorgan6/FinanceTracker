@@ -4,14 +4,15 @@ from rest_framework.parsers import JSONParser
 from expenses.serializers import ExpenseSerializer, PaymentTypeSerializer
 from expenses.models import Expense, PaymentType
 from dateutil import parser
+from datetime import date, timedelta, datetime
 # Create your views here.
 
-def get_all_data():
-    data = ExpenseSerializer(Expense.objects.all(), many=True).data
+def format_data(data):
+    total = 0.0
     for date in data:
         tmp = parser.parse(date['date'])
-        date['date'] = tmp.strftime('%m/%d/%Y at %H:%M')
-
+        date['date'] = tmp.strftime('%b %d, %Y at %I:%M %p')
+        total += date['amount']
     return data
 
 @csrf_exempt
@@ -21,18 +22,29 @@ def expense_list(request):
     For POST --> add a new item
     """
     if request.method == 'GET':
-        data = get_all_data()
+        data = format_data(data=ExpenseSerializer(Expense.objects.all(), many=True).data)
         return JsonResponse(data, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        data['date'] = datetime.strptime(f'{data["date"]} {data["time"]}', '%Y-%m-%d %H:%M:%S')
+        del(data["time"])
         serializer = ExpenseSerializer(data=data)
         print(data)
         if serializer.is_valid():
             serializer.save()
-            data = get_all_data()
+            data = format_data(data=ExpenseSerializer(Expense.objects.all(), many=True).data)
             return JsonResponse(data, status=201, safe=False)
         return JsonResponse(serializer.errors, status=400)
+
+
+def get_last_pk(request, pk):
+    if request.method == 'GET':
+        today = date.today()
+        last_week = today - timedelta(days=pk)
+        data = Expense.objects.filter(date__range=[last_week,today+timedelta(days=1)])
+        data = format_data(data=ExpenseSerializer(data, many=True).data)
+        return JsonResponse(data, safe=False)
 
 
 @csrf_exempt
@@ -61,7 +73,7 @@ def expense_detail(request, pk):
 
     elif request.method == 'DELETE':
         expense.delete()
-        return JsonResponse(data=get_all_data(), safe=False)
+        return JsonResponse(data=format_data(data=ExpenseSerializer(Expense.objects.all(), many=True).data), safe=False)
 
 
 @csrf_exempt

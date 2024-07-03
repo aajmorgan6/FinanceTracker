@@ -11,6 +11,8 @@ function AddModal({ showAdd, setAddFalse, setData }) {
     const [paymentTypes, setPaymentTypes] = useState([]);
     const [showNewPmt, setShowNewPmt] = useState(false);
     const [newPmt, setNewPmt] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +21,9 @@ function AddModal({ showAdd, setAddFalse, setData }) {
             body: JSON.stringify({
                 amount: parseFloat(amount),
                 reason: reason,
-                payment_type: pmtType
+                payment_type: pmtType,
+                date: date,
+                time: time+":00"
             })
         });
         const body = await res.json();
@@ -28,6 +32,8 @@ function AddModal({ showAdd, setAddFalse, setData }) {
         setAmount(0.0);
         setReason("");
         setPmtType("Cash");
+        console.log("date: ", date);
+        console.log("time: ", time)
     }
 
     const handlePmtType = async (e) => {
@@ -118,6 +124,23 @@ function AddModal({ showAdd, setAddFalse, setData }) {
                             </IconButton>
                             </>
                             )}
+                        </Form.Group>
+                        <Form.Group className="flex">
+                            <Form.Label>Time of Expense</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="datepic"
+                                defaultValue={date}
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                            />
+                            <Form.Control
+                                type="time"
+                                name="time"
+                                defaultValue={time}
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                            />
                         </Form.Group>
                         
                     </Form>

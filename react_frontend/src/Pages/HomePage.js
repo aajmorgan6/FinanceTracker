@@ -3,24 +3,32 @@ import { Button } from '@mui/material';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import Table from 'react-bootstrap/Table'
-
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 
 function HomePage() {
+    const [prevDays, setPrevDays] = useState(7);
     const [data, setData] = useState([]);
     const [showAdd, setShowAdd] = useState(false);
     const [showDetail, setShowDetail] = useState(false);
     const [detail, setDetail] = useState([]);
 
+    const handleChange = async (val) => {
+        setPrevDays(val);
+        console.log(prevDays);
+    }
+
     const callAPI = async () => {
-        const res = await fetch('http://localhost:8000/expenses/');
+        const res = await fetch(`http://localhost:8000/lastX/${prevDays}/`);
         const body = await res.json();
         console.log(body);
         setData(body);
     }
 
     useEffect(()=>{
+        setPrevDays(prevDays);
         callAPI();
-    }, []);
+    }, [prevDays]);
 
     const setAddTrue = () => setShowAdd(true);
     const setAddFalse = () => setShowAdd(false);
@@ -47,14 +55,27 @@ function HomePage() {
                     {Object.keys(data).map(key => (
                         <tr key={key} onClick={() => handleDetail(data[key])}>
                             <td>{data[key].date}</td>
-                            <td>{data[key].amount}</td>
+                            <td>{data[key].amount.toFixed(2)}</td>
                             <td>{data[key].payment_type}</td>
                         </tr>
                     ))}
                 </tbody>
             </Table> 
-            <div className="justify-content-right">
+            <div className="">
                 <Button className="text-right btn btn-primary " variant="contained" onClick={setAddTrue}>Add Expense</Button>
+                <ToggleButtonGroup 
+                    type="radio" 
+                    name="options" 
+                    defalutValue={1} 
+                    className="float-end"
+                    value={prevDays}
+                    onChange={handleChange}
+                    >
+                    <ToggleButton id="today" value={0}>Today</ToggleButton>
+                    <ToggleButton id="week" value={7}>1 Week</ToggleButton>
+                    <ToggleButton id="month" value={30}>1 Month</ToggleButton>
+                    <ToggleButton id="year" value={365}>1 Year</ToggleButton>
+                </ToggleButtonGroup>
             </div> 
             </div>
             <div>
