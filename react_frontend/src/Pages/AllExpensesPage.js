@@ -1,38 +1,32 @@
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import Table from 'react-bootstrap/Table'
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import Navbar from '../Navbar';
 
-function HomePage() {
-    const [prevDays, setPrevDays] = useState(7);
+function AllExpensesPage() {
     const [data, setData] = useState([]);
-    const [showAdd, setShowAdd] = useState(false);
     const [showDetail, setShowDetail] = useState(false);
     const [detail, setDetail] = useState([]);
+    const [filter, setFilter] = useState("");
 
     const handleChange = async (val) => {
-        setPrevDays(val);
-        console.log(prevDays);
+        setFilter(val);
+        console.log(filter);
     }
 
     const callAPI = async () => {
-        const res = await fetch(`http://localhost:8000/lastX/${prevDays}/`);
+        const res = await fetch(`http://localhost:8000/expenses/`);
         const body = await res.json();
         console.log(body);
         setData(body);
     }
 
     useEffect(()=>{
-        setPrevDays(prevDays);
+        setFilter(filter);
         callAPI();
-    }, [prevDays]);
-
-    const setAddTrue = () => setShowAdd(true);
-    const setAddFalse = () => setShowAdd(false);
+    }, [filter]);
 
     const handleDetail = (data) => {
         setDetail(data);
@@ -63,30 +57,27 @@ function HomePage() {
                 </tbody>
             </Table> 
             <div className="">
-                <Button className="text-right btn btn-primary " variant="contained" onClick={setAddTrue}>Add Expense</Button>
+                <label>Sort by</label>
                 <ToggleButtonGroup 
                     type="radio" 
                     name="options" 
                     defalutValue={1} 
                     className="float-end"
-                    value={prevDays}
+                    value={filter}
                     onChange={handleChange}
                     >
-                    <ToggleButton id="today" value={0}>Today</ToggleButton>
-                    <ToggleButton id="week" value={7}>1 Week</ToggleButton>
-                    <ToggleButton id="month" value={30}>1 Month</ToggleButton>
-                    <ToggleButton id="year" value={365}>1 Year</ToggleButton>
+                    <ToggleButton id="today" value={""}>Today</ToggleButton>
+                    <ToggleButton id="week" value={"nto"}>1 Week</ToggleButton>
+                    <ToggleButton id="month" value={"something"}>1 Month</ToggleButton>
+                    <ToggleButton id="year" value={"365"}>1 Year</ToggleButton>
                 </ToggleButtonGroup>
             </div> 
             </div>
             <div>
                 <DetailModal data={detail} showDetail={showDetail} setShowDetail={setShowDetail} setData={setData} />
             </div>
-            <div className='container center'>
-                <AddModal showAdd={showAdd} setAddFalse={setAddFalse} setData={setData} prevDays={prevDays}/>
-            </div>
         </div>
     )
 }
 
-export default HomePage;
+export default AllExpensesPage;

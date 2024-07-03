@@ -33,8 +33,8 @@ function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
         setAmount(0.0);
         setReason("");
         setPmtType("Cash");
-        console.log("date: ", date);
-        console.log("time: ", time)
+        setDate(new Date());
+        setTime(new Date());
     }
 
     const handlePmtType = async (e) => {
