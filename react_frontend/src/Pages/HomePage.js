@@ -20,7 +20,7 @@ function HomePage() {
     }
 
     const callAPI = async () => {
-        const res = await fetch(`http://localhost:8000/lastX/${prevDays}/`);
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/lastX/${prevDays}/`);
         const body = await res.json();
         console.log(body);
         setData(body);

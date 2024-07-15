@@ -16,7 +16,7 @@ function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch('http://localhost:8000/expenses/', {
+        await fetch(`${process.env.REACT_APP_BACKEND_URL}/expenses/`, {
             method: "post",
             body: JSON.stringify({
                 amount: parseFloat(amount),
@@ -26,7 +26,7 @@ function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
                 time: time+":00"
             })
         });
-        const res = await fetch(`http://localhost:8000/lastX/${prevDays}/`)
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/lastX/${prevDays}/`)
         const body = await res.json();
         setAddFalse();
         setData(body);   

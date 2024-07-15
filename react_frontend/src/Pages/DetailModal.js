@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 function DetailModal({ data, showDetail, setShowDetail, setData }) {
 
     const handleDelete = async () => {
-        const res = await fetch(`http://localhost:8000/expenses/${data.id}`, {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/expenses/${data.id}`, {
             method: "delete"
         });
         const body = await res.json();
