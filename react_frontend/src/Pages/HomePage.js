@@ -61,7 +61,7 @@ function HomePage() {
     }
 
     return (
-        <div className="justify-content-center try-this vh-100">
+        <div className="justify-content-center bg-color vh-100">
             <Navbar />
                 <div className='container' style={{maxHeight: "400px", overflowY: 'auto' }}>
                     <Table striped bordered hover >

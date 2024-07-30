@@ -9,11 +9,20 @@ function AllExpensesPage() {
     const [data, setData] = useState([]);
     const [showDetail, setShowDetail] = useState(false);
     const [detail, setDetail] = useState([]);
-    const [filter, setFilter] = useState("");
+    const [filter, setFilter] = useState();
+    const [total, setTotal] = useState(0.0);
 
-    const handleChange = async (val) => {
+    const handleChange = (val) => {
         setFilter(val);
-        console.log(filter);
+        if (val === 0) { // Oldest first
+            callAPI();
+        } else if (val === 1) { // Newest first
+            setData(data.reverse());
+        } else if (val === 2) { // Most expensive
+            setData(data.sort((a, b) => b.amount - a.amount))
+        } else if (val === 3) { // Most expensive
+            setData(data.sort((a, b) => a.amount - b.amount))
+        }
     }
 
     const callAPI = async () => {
@@ -21,12 +30,16 @@ function AllExpensesPage() {
         const body = await res.json();
         console.log(body);
         setData(body);
+        var tmp = 0.0
+        for (const exp in data) {
+            tmp += data[exp].amount;
+        }
+        setTotal(tmp);
     }
 
     useEffect(()=>{
-        setFilter(filter);
         callAPI();
-    }, [filter]);
+    }, []);
 
     const handleDetail = (data) => {
         setDetail(data);
@@ -35,44 +48,44 @@ function AllExpensesPage() {
     }
 
     return (
-        <div className="justify-content-center bg-info vh-100">
+        <div className="justify-content-center bg-color vh-100">
             <Navbar />
-                <div className='container'>
-            <Table striped bordered hover>
-                <thead className="thead-dark">
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Amount</th>
-                        <th scope='col'>Payment Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.keys(data).map(key => (
-                        <tr key={key} onClick={() => handleDetail(data[key])}>
-                            <td>{data[key].date}</td>
-                            <td>{data[key].amount.toFixed(2)}</td>
-                            <td>{data[key].payment_type}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table> 
-            <div className="">
-                <label>Sort by</label>
-                <ToggleButtonGroup 
-                    type="radio" 
-                    name="options" 
-                    defalutValue={1} 
-                    className="float-end"
-                    value={filter}
-                    onChange={handleChange}
-                    >
-                    <ToggleButton id="today" value={""}>Today</ToggleButton>
-                    <ToggleButton id="week" value={"nto"}>1 Week</ToggleButton>
-                    <ToggleButton id="month" value={"something"}>1 Month</ToggleButton>
-                    <ToggleButton id="year" value={"365"}>1 Year</ToggleButton>
-                </ToggleButtonGroup>
-            </div> 
-            </div>
+                <div className='container' style={{maxHeight: "800px", overflowY: 'auto' }}>
+                    <Table striped bordered hover>
+                        <thead className="thead-dark" style={{position: 'sticky', top: '0'}}>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Amount</th>
+                                <th scope='col'>Payment Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.keys(data).map(key => (
+                                <tr key={key} onClick={() => handleDetail(data[key])}>
+                                    <td>{data[key].date}</td>
+                                    <td>{data[key].amount.toFixed(2)}</td>
+                                    <td>{data[key].payment_type}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table> 
+                </div>
+                <div className="mt-3 container">
+                        <label>Total Expenses: ${total.toFixed(2)}</label>
+                        <ToggleButtonGroup 
+                            type="radio" 
+                            name="options" 
+                            defaultValue={0}
+                            className="float-end"
+                            value={filter}
+                            onChange={handleChange}
+                            >
+                            <ToggleButton id="old" value={0}>Oldest</ToggleButton>
+                            <ToggleButton id="new" value={1}>Newest</ToggleButton>
+                            <ToggleButton id="amountH" value={2}>Amount High</ToggleButton>
+                            <ToggleButton id="amountL" value={3}>Amount Low</ToggleButton>
+                        </ToggleButtonGroup>
+                    </div> 
             <div>
                 <DetailModal data={detail} showDetail={showDetail} setShowDetail={setShowDetail} setData={setData} />
             </div>
