@@ -8,8 +8,6 @@ Might connect to an email address that can be scanned periodically for emails of
 
 ## TODO: 
 
-Start getting previous week's worth of expenses and display them on a chart/graph.
-
 Make users so that multiple people can use this.
 
 More fields:
