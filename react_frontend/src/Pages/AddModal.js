@@ -134,6 +134,7 @@ function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
                                 defaultValue={date}
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
+                                required
                             />
                             <Form.Control
                                 type="time"
@@ -141,6 +142,7 @@ function AddModal({ showAdd, setAddFalse, setData, prevDays }) {
                                 defaultValue={time}
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
+                                required
                             />
                         </Form.Group>
                         
